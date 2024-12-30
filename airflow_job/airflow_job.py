@@ -73,7 +73,7 @@ batch_details = {
 }
 
 spark_submit = DataprocCreateBatchOperator(
-    task_id = "SparkSubmit ServerLess Architecture",
+    task_id = "SparkSubmit_ServerLess_Architecture",
     batch = batch_details,
     batch_id = batch_id,
     project_id = "euphoric-diode-442615-u6",
