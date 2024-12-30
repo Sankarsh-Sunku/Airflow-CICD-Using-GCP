@@ -61,7 +61,13 @@ batch_details = {
         ]
     },
     "runtime_config": {
-        "version": "2.2",  # Specify Dataproc version (if needed)
+        "version": "2.2",  # Specify Dataproc version (if needed)\
+        "properties": {
+            # Reduce resource allocation to fit within quota
+            "spark.executor.instances": "2",   # Number of executors
+            "spark.executor.cores": "2",      # Number of cores per executor
+            "spark.driver.cores": "2",        # Number of cores for driver
+        }
     },
     "environment_config": {
         "execution_config": {
