@@ -65,7 +65,7 @@ batch_details = {
     },
     "environment_config": {
         "execution_config": {
-            "service_account": "340433674005-compute@developer.gserviceaccount.com",
+            "service_account": "450390685058-compute@developer.gserviceaccount.com",
             "network_uri": "projects/euphoric-diode-442615-u6/global/networks/default",
             "subnetwork_uri": "projects/euphoric-diode-442615-u6/regions/us-central1/subnetworks/default",
         }
