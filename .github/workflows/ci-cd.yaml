@@ -1,0 +1,46 @@
+name: Airflow and Spark CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  upload-to-dev:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v0.5.0
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Upload Variables to Google Cloud Storage
+        run: |
+          gsutil cp variables/dev/variables.json gs://us-central1-airflow-dec-a25546c2-bucket/data/dev/variables.json
+
+      - name: Import Uploaded Variables to Airflow
+        run: |
+          gcloud composer environments run airflow-dec \
+          --location us-central1 \
+          variables import -- /home/airflow/gcs/data/dev/variables.json
+
+      - name: Upload Spark Job to GCS
+        run: |
+          gsutil cp spark_job/spark_transformation_job.py gs://airflow_project_sankarsh/airflow-ci-cd/code/
+
+      - name: Upload Airflow Job code to DAGS folder
+        run: |
+          gcloud composer environments storage dags import \
+          --environment airflow-dec \
+          --location us-central1 \
+          --source airflow_job/airflow_job.py
